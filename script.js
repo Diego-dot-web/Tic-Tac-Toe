@@ -1,15 +1,30 @@
-(function Gameboard(){
-    const gameboard = [];
-    const colums = 3;
-    const rows = 3;
+(function GameBoard (){
+    const board = [];
+    const row = 3;
+    const columns = 3;
 
-    //this create the game, and store the results
+    for (let i = 0; i < row; i++) {
+        board[i] = [];
+        for (let j = 0; j < columns; j++) {
+            board[i].push(0);
+        };
+    };
 
-    //The players
-    const players = [
-        {
-            playerOne: ""
-        }
-    ]
-    //the flow
+    console.log(board)
 })();
+
+function Player(name, symbol) {
+    const PlayerName = name;
+    const PlayerSymbol = symbol;
+
+    return{
+        PlayerName, PlayerSymbol
+    }
+}
+
+const player1 = Player("Player One", "X");
+const player2 = Player("Player Two", "O");
+
+function GameFlow (){
+    
+}
