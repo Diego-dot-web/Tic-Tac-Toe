@@ -12,13 +12,8 @@ function Gameboard (){
 
     const getBoard = () => board
 
-    const dropToken = (column, player) => {
-        const availableCells = board.filter((row) => row[column].getValue() === 0).map(row => row[column]);
-  
-        if (!availableCells.length) return;
-    
-        const lowestRow = availableCells.length - 1;
-        board[lowestRow][column].addToken(player);
+    const dropToken = (column,row ,player) => {
+       board[row][column].addToken(player) 
     }
 
     const printBoard = () => {
@@ -30,19 +25,21 @@ function Gameboard (){
 };
 
 function Cell() {
-    let value = 0;
-  
+    let value;
+
     const addToken = (player) => {
-      value = player;
+        if (value === undefined){
+        value = player
+        }
     };
-  
+
     const getValue = () => value;
-  
+
     return {
-      addToken,
-      getValue
+        addToken,
+        getValue
     };
-  }
+}
 
 function GameFlow (playerOneName = "Player One",playerTwoName = "Player Two"){
     const board = Gameboard();
@@ -71,9 +68,9 @@ function GameFlow (playerOneName = "Player One",playerTwoName = "Player Two"){
         console.log(`${getActivePlayer().name}'s turn.`);
     };
 
-    const playRound = (column) => {
-        console.log(`Player has changed token in ${column}`)
-        board.dropToken(column, getActivePlayer().token)
+    const playRound = (column, row) => {
+        console.log(`Player has changed token in ${row} and ${column}`)
+        board.dropToken(column ,row, getActivePlayer().token)
 
         switchPlayerTurn();
         printNewRound();
@@ -101,24 +98,30 @@ function ScreenController(){
 
         playerTurnDiv.textContent = `${activePlayer.name}'s turn...`
 
-        board.forEach(row => {
-            row.forEach((cell, index) => {
+        board.forEach((row, indexRow )=> {
+
+
+            row.forEach((cell, indexColumn) => {
                 const cellButton = document.createElement("button");
                 cellButton.classList.add("cell");
 
-                cellButton.dataset.column = index
+                cellButton.dataset.row = indexRow;
+                cellButton.dataset.column = indexColumn;
                 cellButton.textContent = cell.getValue();
                 boardDiv.appendChild(cellButton);
-            })
+            });
+
+            
         });
     }
 
     function clickHandlerBoard(e) {
         const selectedColumn = e.target.dataset.column;
+        const selectedRow = e.target.dataset.row;
     
         if (!selectedColumn) return;
     
-        game.playRound(selectedColumn);
+        game.playRound(selectedColumn, selectedRow);
         updateScreen();
     }
     
