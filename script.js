@@ -21,7 +21,7 @@ function Gameboard (){
         console.log(boardWithCellValues)
     }
 
-    return{getBoard, dropToken, printBoard}
+    return{getBoard, dropToken, printBoard, }
 };
 
 function Cell() {
@@ -81,7 +81,8 @@ function GameFlow (playerOneName = "Player One",playerTwoName = "Player Two"){
     return {
         playRound,
         getActivePlayer,
-        getBoard: board.getBoard
+        getBoard: board.getBoard,
+        evaluatesTheResult: board.evaluatesTheResult,
     }
 }
 
@@ -113,21 +114,74 @@ function ScreenController(){
 
             
         });
-    }
 
+    }
+    
     function clickHandlerBoard(e) {
         const selectedColumn = e.target.dataset.column;
         const selectedRow = e.target.dataset.row;
-    
+        
         if (!selectedColumn) return;
-    
+        
         game.playRound(selectedColumn, selectedRow);
         updateScreen();
+        evaluatesTheResult();
+    }
+
+    function evaluatesTheResult(){
+        const board = game.getBoard()
+
+        if (board[0][0].getValue() === "X" && board[0][1].getValue() === "X" && board[0][2].getValue() === "X"|| 
+            board[1][0].getValue() === "X" && board[1][1].getValue() === "X" && board[1][2].getValue() === "X"||
+            board[2][0].getValue() === "X" && board[2][1].getValue() === "X" && board[2][2].getValue() === "X"||
+            board[0][0].getValue() === "X" && board[1][0].getValue() === "X" && board[2][0].getValue() === "X"||
+            board[0][1].getValue() === "X" && board[1][1].getValue() === "X" && board[2][1].getValue() === "X"||
+            board[0][2].getValue() === "X" && board[1][2].getValue() === "X" && board[2][2].getValue() === "X"||
+            board[0][0].getValue() === "X" && board[1][1].getValue() === "X" && board[2][2].getValue() === "X"||
+            board[0][2].getValue() === "X" && board[1][1].getValue() === "X" && board[2][0].getValue() === "X") {
+                console.log("player 1")
+                stop("Player1")
+        } else if (board[0][0].getValue() === "O" && board[0][1].getValue() === "O" && board[0][2].getValue() === "O"||
+                    board[1][0].getValue()=== "O" && board[1][1].getValue() === "O" && board[1][2].getValue() === "O"|| 
+                    board[2][0].getValue()=== "O" && board[2][1].getValue() === "O" && board[2][2].getValue() === "O"||
+                    board[0][0].getValue()=== "O" && board[1][0].getValue() === "O" && board[2][0].getValue() === "O"||
+                    board[0][1].getValue()=== "O" && board[1][1].getValue() === "O" && board[2][1].getValue() === "O"||
+                    board[0][2].getValue()=== "O" && board[1][2].getValue() === "O" && board[2][2].getValue() === "O"||
+                    board[0][0].getValue()=== "O" && board[1][1].getValue() === "O" && board[2][2].getValue() === "O"||
+                    board[0][2].getValue()=== "O" && board[1][1].getValue() === "O" && board[2][0].getValue() === "O"){
+            console.log("player 2")
+            stop("Player2")
+        } else if (board[0][0].getValue() !== undefined && board[0][1].getValue() !== undefined && board[0][2].getValue() !== undefined &&
+                    board[1][0].getValue() !== undefined && board[1][1].getValue() !== undefined && board[1][2].getValue() !== undefined &&
+                    board[2][0].getValue() !== undefined && board[2][1].getValue() !== undefined && board[2][2].getValue() !== undefined){
+            console.log("tie")
+            stop("Tie")
+        }
+
+        
+
+    }
+
+    boardDiv.addEventListener("click", clickHandlerBoard); 
+
+    function stop(str){
+        boardDiv.removeEventListener("click", clickHandlerBoard)
+        const winnerDiv = document.createElement("div");
+        const container = document.querySelector(".container")
+
+        if (str === "Player1"){
+            winnerDiv.textContent = "Player One has Won"
+        } else if (str === "Player2"){
+            winnerDiv.textContent = "Player Two has Won"
+        } else if (str === "Tie") {
+            winnerDiv.textContent = "It's a Tie"
+        }
+        container.appendChild(winnerDiv)
     }
     
-    boardDiv.addEventListener("click", clickHandlerBoard)
+
+    updateScreen();
     
-    updateScreen()
 }
 
 ScreenController();
