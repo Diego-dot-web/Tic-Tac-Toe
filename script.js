@@ -50,7 +50,7 @@ function MakePlayer(name, token){
     const form = document.querySelector("form");
     const playerOneName = document.querySelector("#PlayerOneName");
     const playerTwoName = document.querySelector("#PlayerTwoName");
-
+    
     form.addEventListener("submit", (e) => {
         e.preventDefault()
 
@@ -196,7 +196,6 @@ function ScreenController(playerOneName, playerTwoName){
     function restartGame(){
         const restarBtn = document.querySelector(".restart");
         const form = document.querySelector("form");
-        
         
         restarBtn.addEventListener("click", ()=>{
             const winner = document.querySelector(".winner");
