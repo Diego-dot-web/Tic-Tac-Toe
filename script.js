@@ -39,21 +39,39 @@ function Cell() {
         addToken,
         getValue
     };
+};
+
+function MakePlayer(name, token){
+    this.name = name;
+    this.token = token;
 }
 
-function GameFlow (playerOneName = "Player One",playerTwoName = "Player Two"){
-    const board = Gameboard();
+(function createPlayers(){
+    const form = document.querySelector("form");
+    const playerOneName = document.querySelector("#PlayerOneName");
+    const playerTwoName = document.querySelector("#PlayerTwoName");
 
-    const players = [
-        {
-        name: playerOneName,
-        token: "X"
-        },
-        {
-        name: playerTwoName,
-        token: "O"
-        }
+    form.addEventListener("submit", (e) => {
+        e.preventDefault()
+
+        startGame()
+        ScreenController(playerOneName.value, playerTwoName.value)
+    })
+})()
+
+function startGame(){
+    const board = document.querySelector(".board");
+
+    board.style.display = "grid"
+}
+
+function GameFlow (playerOneName = "One", playerTwoName = "Two"){
+    const board = Gameboard();
+    console.log("1")
+    const players = [new MakePlayer(playerOneName, "X"), new MakePlayer(playerTwoName, "O")
     ];
+
+    console.log(players)
 
     let activePlayer = players[0]
 
@@ -65,12 +83,12 @@ function GameFlow (playerOneName = "Player One",playerTwoName = "Player Two"){
     
     const printNewRound = () => {
         board.printBoard();
-        console.log(`${getActivePlayer().name}'s turn.`);
+        console.log(`${activePlayer.name}'s turn.`);
     };
 
     const playRound = (column, row) => {
-        console.log(`Player has changed token in ${row} and ${column}`)
-        board.dropToken(column ,row, getActivePlayer().token)
+        console.log(`${activePlayer.name} has changed token in ${row} and ${column}`)
+        board.dropToken(column ,row, activePlayer.token)
 
         switchPlayerTurn();
         printNewRound();
@@ -82,15 +100,15 @@ function GameFlow (playerOneName = "Player One",playerTwoName = "Player Two"){
         playRound,
         getActivePlayer,
         getBoard: board.getBoard,
-        evaluatesTheResult: board.evaluatesTheResult,
     }
+
 }
 
-function ScreenController(){
-    const game = GameFlow();
+function ScreenController(playerOneName, playerTwoName){
+    const game = GameFlow(playerOneName, playerTwoName);
     const playerTurnDiv = document.querySelector(".turn");
     const boardDiv = document.querySelector(".board");
-
+    console.log("2")
     const updateScreen = () => {
         boardDiv.textContent = "";
 
@@ -157,9 +175,6 @@ function ScreenController(){
             console.log("tie")
             stop("Tie")
         }
-
-        
-
     }
 
     boardDiv.addEventListener("click", clickHandlerBoard); 
@@ -179,9 +194,7 @@ function ScreenController(){
         container.appendChild(winnerDiv)
     }
     
-
     updateScreen();
     
 }
 
-ScreenController();
