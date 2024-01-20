@@ -70,7 +70,7 @@ function GameFlow (playerOneName = "One", playerTwoName = "Two"){
     const players = [new MakePlayer(playerOneName, "X"), new MakePlayer(playerTwoName, "O")
     ];
 
-    console.log(players)
+    const getPlayers = () => players
 
     let activePlayer = players[0]
 
@@ -99,6 +99,7 @@ function GameFlow (playerOneName = "One", playerTwoName = "Two"){
         playRound,
         getActivePlayer,
         getBoard: board.getBoard,
+        getPlayers
     }
 
 }
@@ -182,11 +183,12 @@ function ScreenController(playerOneName, playerTwoName){
         const winnerDiv = document.createElement("h3");
         winnerDiv.classList = "winner"
         const container = document.querySelector(".container");
+        const winnerPlayer = game.getPlayers();
 
         if (str === "Player1"){
-            winnerDiv.textContent = "Player One has Won"
+            winnerDiv.textContent = `${winnerPlayer[0].name} has Won`
         } else if (str === "Player2"){
-            winnerDiv.textContent = "Player Two has Won"
+            winnerDiv.textContent = `${winnerPlayer[1].name} has Won`
         } else if (str === "Tie") {
             winnerDiv.textContent = "It's a Tie"
         }
