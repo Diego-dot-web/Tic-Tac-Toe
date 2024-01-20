@@ -67,7 +67,6 @@ function startGame(){
 
 function GameFlow (playerOneName = "One", playerTwoName = "Two"){
     const board = Gameboard();
-    console.log("1")
     const players = [new MakePlayer(playerOneName, "X"), new MakePlayer(playerTwoName, "O")
     ];
 
@@ -108,7 +107,6 @@ function ScreenController(playerOneName, playerTwoName){
     const game = GameFlow(playerOneName, playerTwoName);
     const playerTurnDiv = document.querySelector(".turn");
     const boardDiv = document.querySelector(".board");
-    console.log("2")
     const updateScreen = () => {
         boardDiv.textContent = "";
 
@@ -146,6 +144,8 @@ function ScreenController(playerOneName, playerTwoName){
         evaluatesTheResult();
     }
 
+    boardDiv.addEventListener("click", clickHandlerBoard)
+
     function evaluatesTheResult(){
         const board = game.getBoard()
 
@@ -177,12 +177,11 @@ function ScreenController(playerOneName, playerTwoName){
         }
     }
 
-    boardDiv.addEventListener("click", clickHandlerBoard); 
-
     function stop(str){
         boardDiv.removeEventListener("click", clickHandlerBoard)
-        const winnerDiv = document.createElement("div");
-        const container = document.querySelector(".container")
+        const winnerDiv = document.createElement("h3");
+        winnerDiv.classList = "winner"
+        const container = document.querySelector(".container");
 
         if (str === "Player1"){
             winnerDiv.textContent = "Player One has Won"
@@ -193,7 +192,22 @@ function ScreenController(playerOneName, playerTwoName){
         }
         container.appendChild(winnerDiv)
     }
-    
+
+    function restartGame(){
+        const restarBtn = document.querySelector(".restart");
+        const form = document.querySelector("form");
+        
+        
+        restarBtn.addEventListener("click", ()=>{
+            const winner = document.querySelector(".winner");
+            form.reset()
+            boardDiv.style.display = "none"
+            playerTurnDiv.textContent = "" 
+            winner.remove() 
+            console.log("works");
+        })
+    }
+    restartGame()
     updateScreen();
     
 }
